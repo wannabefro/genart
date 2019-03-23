@@ -32,7 +32,7 @@ const sketch = () => {
   const points = createTops().sort((a, b) => a.max - b.max);
 
   return ({ context, width, height }) => {
-    console.log(points);
+    context.globalAlpha = 0.95;
     points.forEach(({ from, to }) => {
       const x1 = lerp(margin, width - margin, from.u);
       const y1 = lerp(margin, height - margin, from.v);
