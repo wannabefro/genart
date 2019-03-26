@@ -1,6 +1,8 @@
 const canvasSketch = require('canvas-sketch');
 const random = require('canvas-sketch-util/random');
 const palettes = require('nice-color-palettes');
+const eases = require('eases');
+const BezierEasing = require('bezier-easing');
 
 // Ensure ThreeJS is in global scope for the 'examples/'
 global.THREE = require('three');
@@ -51,11 +53,13 @@ const sketch = ({ context }) => {
     scene.add(mesh);
   }
 
-  scene.add(new THREE.AmbientLight('hsl(0, 0%, 20%)'));
+  scene.add(new THREE.AmbientLight('hsl(0, 0%, 90%)'));
 
   const light = new THREE.DirectionalLight('white', 1);
   light.position.set(0, 4, 0);
   scene.add(light);
+
+  const easeFn = BezierEasing(0.67,0.3,0.29,0.99);
 
   // draw each frame
   return {
@@ -88,7 +92,8 @@ const sketch = ({ context }) => {
     },
     // Update & render your scene here
     render ({ playhead }) {
-      scene.rotation.y = playhead * Math.PI * 2;
+      const t = Math.sin(playhead * Math.PI);
+      scene.rotation.z = easeFn(t);
       renderer.render(scene, camera);
     },
     // Dispose of events & renderer for cleaner hot-reloading
